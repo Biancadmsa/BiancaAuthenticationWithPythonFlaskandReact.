@@ -36,7 +36,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const opts ={
 					method:"POST",
 					headers: {
-						"Content_Type": "application/json"
+						"Content-Type": "application/json"
 					},
 					body: JSON.stringify({
 						"email": email,
@@ -45,9 +45,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				};
 				
 				try{
-					const resp = await fetch('https://laughing-lamp-9vrpvrpqr4rf74jj-3001.app.github.dev/api/token', opts)
+					const resp = await fetch('https://laughing-lamp-9vrpvrpqr4rf74jj-3001.app.github.dev/api/login', opts)
 				
-					if(resp.status !== 200){
+					if(resp.status !== 200){ console.log(resp)
 						alert("There has been some error!!!");
 						return false;
 					}  
