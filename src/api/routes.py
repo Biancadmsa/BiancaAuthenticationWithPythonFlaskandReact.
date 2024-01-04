@@ -43,13 +43,14 @@ def signup():
 
     return jsonify("User was created"), 200
 
+
 @api.route("/hello", methods=["GET"])
 @jwt_required()
 def get_hello():
 
-    email = get_jwt_identity()
+    emailBody = get_jwt_identity(),
     dictionary = {
-        "message":"Hello Wolrd" + email
+        "message":"Hello: " + emailBody
     }
     
     return jsonify(dictionary)

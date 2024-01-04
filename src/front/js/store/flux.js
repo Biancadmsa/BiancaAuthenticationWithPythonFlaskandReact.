@@ -23,13 +23,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			syncTokenFromSessionStore: () => {
-				sessionStorage.removeItem("token");
-				setStore({ token: null});
+				const token = sessionStorage.getItem("token");
+				if(token && token !="" && token !=undefined) setStore({token : token})
+				
 			},
 
 			logout: () => {
-				const token = sessionStorage.getItem("token");
-				if(token && token !="" && token !=undefined) setStore({ token:token});
+				sessionStorage.removeItem("token");
+				setStore({ token : null});
 			},
 
 			login: async (email, password) => {
@@ -51,7 +52,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						alert("There has been some error!!!");
 						return false;
 					}  
-				
+					
 					const data = await resp.json();
 					console.log( "This came from the backend", data)
 					sessionStorage.setItem("token", data.access_token);
@@ -63,24 +64,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			getMessage: async () => {
-				try{
+			getMessage:  () => {
 					const store = getStore();
 					const opts = {
 						headers: {
-							"Authorization": "Bearer" + store.token
+							"Authorization": "Bearer " + store.token
 						}
-					}
+					};
 					// fetching data from the backend
-					const resp = await fetch('https://laughing-lamp-9vrpvrpqr4rf74jj-3001.app.github.dev/api/token', opts)
-					const data = await resp.json()
-					setStore({ message: data.message })
-					// don't forget to return something, that is how the async resolves
-					return data;
-				}catch(error){
-					console.log("Error loading message from backend", error)
-				}
-			},
+					fetch('https://laughing-lamp-9vrpvrpqr4rf74jj-3001.app.github.dev/api/token', opts)
+						.then(resp =>resp.json())
+						.then(data => setStore({message: data.message}))
+						.catch(error => console.log("Error loading massege from backend", error));
+				},
+			
 			changeColor: (index, color) => {
 				//get the store
 				const store = getStore();
